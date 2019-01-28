@@ -12,11 +12,7 @@ import com.neovisionaries.i18n.CountryCode;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.SpotifyHttpManager;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import com.wrapper.spotify.model_objects.credentials.ClientCredentials;
-import com.wrapper.spotify.model_objects.specification.Category;
-import com.wrapper.spotify.model_objects.specification.Paging;
-import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
 import com.wrapper.spotify.requests.data.browse.GetListOfCategoriesRequest;
 
@@ -27,21 +23,36 @@ public class APIFactory {
 
 	private static final String CLIENTID = "173dc9c6e90f4a2e987a196c9f1adaf8";
 	private static final String CLIENTSECRET = "a658dd16e4a6463a9d5c856aee9155c0";
-	private static final String code = "";
+	// private static final String code = "";
 	private static final URI redirectURI = SpotifyHttpManager
-			.makeUri("http://localhost:8080/Desafio-Beblue_Engenheiro-Back-End_Tiago_Ferezin/home/callback/");
+			.makeUri("https://example.com/spotify-redirect");
 
 	private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
-			.setClientId(CLIENTID).setClientSecret(CLIENTSECRET).setRedirectUri(redirectURI).build();
+			.setClientId(CLIENTID).setClientSecret(CLIENTSECRET)
+			.setRedirectUri(redirectURI).build();
 
 	private static final ClientCredentialsRequest clientCredentialsRequest = spotifyApi
 			.clientCredentials().build();
-	private static final AuthorizationCodeRequest authorizationCodeRequest = spotifyApi
-			.authorizationCode(code).build();
+	// private static final AuthorizationCodeRequest authorizationCodeRequest =
+	// spotifyApi
+	// .authorizationCode(code).build();
 
 	private static final GetListOfCategoriesRequest getListOfCategoriesRequest = spotifyApi
 			.getListOfCategories().country(CountryCode.BR).limit(50).offset(0)
 			.locale("pt_BR").build();
+
+	public static String getAccessToken() {
+		String retorno = "";
+		try {
+			final ClientCredentials clientCredentials = clientCredentialsRequest
+					.execute();
+			retorno = clientCredentials.getAccessToken();
+		} catch (IOException | SpotifyWebApiException e) {
+			// TODO: handle exception
+			System.out.println("Error: " + e.getMessage());
+		}
+		return retorno;
+	}
 
 	public static void clientCredentials_Sync() {
 		try {
@@ -66,32 +77,10 @@ public class APIFactory {
 					.get();
 
 			spotifyApi.setAccessToken(clientCredentials.getAccessToken());
+			// spotifyApi.builder();
 
 			System.out.println("Expires in: "
 					+ clientCredentials.getExpiresIn());
-		} catch (InterruptedException | ExecutionException e) {
-			System.out.println("Error: " + e.getCause().getMessage());
-		}
-	}
-
-	public static void getListOfCategories_Async() {
-		try {
-
-			final Future<AuthorizationCodeCredentials> authorizationCodeCredentialsFuture = authorizationCodeRequest
-					.executeAsync();
-
-			// ...
-
-			final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeCredentialsFuture
-					.get();
-			final Future<Paging<Category>> pagingFuture = getListOfCategoriesRequest
-					.executeAsync();
-
-			// ...
-
-			final Paging<Category> categoryPaging = pagingFuture.get();
-
-			System.out.println("Total: " + categoryPaging.getTotal());
 		} catch (InterruptedException | ExecutionException e) {
 			System.out.println("Error: " + e.getCause().getMessage());
 		}
