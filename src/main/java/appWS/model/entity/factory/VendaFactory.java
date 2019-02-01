@@ -50,4 +50,14 @@ public class VendaFactory {
 		return retorno;
 	}
 
+	public Double valorTotalVenda(List<Double> listaValores) {
+		Double retorno = 0D;
+
+		for (Double valor : listaValores) {
+			retorno = retorno + valor;
+		}
+
+		return retorno;
+	}
+
 }

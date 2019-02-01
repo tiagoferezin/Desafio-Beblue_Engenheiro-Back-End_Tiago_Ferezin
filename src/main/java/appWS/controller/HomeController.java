@@ -121,6 +121,8 @@ public class HomeController {
 		Venda vendaPesquisa = new Venda();
 		Long idVenda = venda.getIdVenda();
 		vendaPesquisa = vendaRepositorio.findOne(idVenda);
+		VendaFactory vf = new VendaFactory();
+		List<Double> listaValoresCashBack = new ArrayList<Double>();
 
 		CashBackFactory csf = new CashBackFactory();
 		Double precoAlbum = 26D;
@@ -131,6 +133,8 @@ public class HomeController {
 		listaCategoriasDesconto.add("CLASSIC");
 		listaCategoriasDesconto.add("POP");
 		Album[] albuns = venda.getAlbum();
+
+		List<Double> listaValoresVenda = new ArrayList<Double>();
 
 		String diaDaSemana = "";
 		Calendar dataAtual = Calendar.getInstance();
@@ -151,13 +155,25 @@ public class HomeController {
 					Double valorCashBack = csf.getValorCashBack(precoAlbum,
 							porcentagemCB);
 
+					listaValoresCashBack.add(valorCashBack);
+
 					valor = precoAlbum - valorCashBack;
+					listaValoresVenda.add(valor);
 				}
 
 			}
 		}
 
+		Double totalDoCashBack = 0D;
+		Double valorTotalVenda = 0D;
+		totalDoCashBack = csf.getTotalCashBack(listaValoresCashBack);
+		valorTotalVenda = vf.valorTotalVenda(listaValoresVenda);
+		venda.setCashbackTotal(totalDoCashBack);
+		venda.setValorTotal(valorTotalVenda);
+
 		if ((vendaPesquisa != null) && (vendaPesquisa.getIdVenda() > 0L)) {
+			vendaPesquisa.setCashbackTotal(totalDoCashBack);
+			vendaPesquisa.setValorTotal(valorTotalVenda);
 			vendaRepositorio.save(vendaPesquisa); // UPDATE
 		} else {
 			vendaRepositorio.save(venda); // INSERT

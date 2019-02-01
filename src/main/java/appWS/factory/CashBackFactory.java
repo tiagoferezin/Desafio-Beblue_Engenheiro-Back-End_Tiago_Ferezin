@@ -90,10 +90,10 @@ public class CashBackFactory {
 		return retorno;
 	}
 
-	public Double getTotalCashBack(List<Double> listaValoresCashNack) {
+	public Double getTotalCashBack(List<Double> listaValoresCashBack) {
 		Double retorno = 0D;
 
-		for (Double valor : listaValoresCashNack) {
+		for (Double valor : listaValoresCashBack) {
 			retorno = retorno + valor;
 		}
 
