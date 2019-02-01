@@ -34,13 +34,13 @@ import com.wrapper.spotify.model_objects.specification.Album;
  * @author Tiago Ferezin Data: 27/01/2019
  */
 @RestController
-@RequestMapping("/home")
-public class HomeController {
+@RequestMapping("/api")
+public class APIController {
 
 	@Autowired
 	VendaRepositorio vendaRepositorio;
 
-	public HomeController() {
+	public APIController() {
 		System.out
 				.println("Iniciou Home!!!"
 						+ "URL: http://localhost:8080/Desafio-Beblue_Engenheiro-Back-End_Tiago_Ferezin/home/buscar/");
