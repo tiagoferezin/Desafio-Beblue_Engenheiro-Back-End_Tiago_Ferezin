@@ -71,6 +71,19 @@ public class HomeController {
 		return retorno;
 	}
 
+	@RequestMapping(value = "/album/{idAlbum}", method = RequestMethod.GET)
+	@ResponseBody
+	public String albumPorId(String idAlbum) {
+		String retorno = "";
+
+		APIFactory.clientCredentials_Async();
+
+		if (idAlbum != "") {
+			retorno = APIAlbum.getAlbumPorId(idAlbum);
+		}
+		return retorno;
+	}
+
 	@RequestMapping(value = "/vendasEntreDatas/{dataInicial}-{dataFinal}", method = RequestMethod.GET)
 	@ResponseBody
 	public String listarVendas(String dataInicial, String dataFinal) {
@@ -106,11 +119,11 @@ public class HomeController {
 		Venda vendaPesquisa = new Venda();
 		Long idVenda = venda.getIdVenda();
 		vendaPesquisa = vendaRepositorio.findOne(idVenda);
-		
-		if((vendaPesquisa!=null)&&(vendaPesquisa.getIdVenda()>0L)){
-			vendaRepositorio.save(vendaPesquisa); //UPDATE
-		}else{
-			vendaRepositorio.save(venda); //INSERT
+
+		if ((vendaPesquisa != null) && (vendaPesquisa.getIdVenda() > 0L)) {
+			vendaRepositorio.save(vendaPesquisa); // UPDATE
+		} else {
+			vendaRepositorio.save(venda); // INSERT
 		}
 
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
