@@ -10,6 +10,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -95,6 +98,22 @@ public class HomeController {
 		Gson gson = new Gson();
 		retorno = gson.toJson(listaVendasPorOrdemData);
 		return retorno;
+	}
+
+	@RequestMapping(value = "/adicionarVenda/", method = RequestMethod.POST)
+	public ResponseEntity<Void> adicionarVenda(@RequestBody Venda venda) {
+
+		Venda vendaPesquisa = new Venda();
+		Long idVenda = venda.getIdVenda();
+		vendaPesquisa = vendaRepositorio.findOne(idVenda);
+		
+		if((vendaPesquisa!=null)&&(vendaPesquisa.getIdVenda()>0L)){
+			vendaRepositorio.save(vendaPesquisa); //UPDATE
+		}else{
+			vendaRepositorio.save(venda); //INSERT
+		}
+
+		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 
 }
