@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,7 +56,7 @@ public class VendaController {
 
 	@RequestMapping(value = "/venda/{idVenda}", method = RequestMethod.GET)
 	@ResponseBody
-	public String vendaPeloId(Long idVenda) {
+	public String vendaPeloId(@PathVariable("idVenda") Long idVenda) {
 		String retorno = "";
 
 		Venda venda = new Venda();
@@ -68,7 +69,7 @@ public class VendaController {
 
 	@RequestMapping(value = "/album/{idAlbum}", method = RequestMethod.GET)
 	@ResponseBody
-	public String albumPorId(String idAlbum) {
+	public String albumPorId(@PathVariable("idAlbum") String idAlbum) {
 		String retorno = "";
 
 		APIFactory.clientCredentials_Async();
@@ -81,7 +82,8 @@ public class VendaController {
 
 	@RequestMapping(value = "/vendasEntreDatas/{dataInicial}-{dataFinal}", method = RequestMethod.GET)
 	@ResponseBody
-	public String listarVendas(String dataInicial, String dataFinal) {
+	public String listarVendas(@PathVariable("dataInicial") String dataInicial,
+			@PathVariable("dataFinal") String dataFinal) {
 		String retorno = "";
 
 		SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
