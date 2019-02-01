@@ -1,7 +1,7 @@
 /**
  * 
  */
-package appWS.model.repoositories;
+package appWS.model.repositories;
 
 import java.util.List;
 

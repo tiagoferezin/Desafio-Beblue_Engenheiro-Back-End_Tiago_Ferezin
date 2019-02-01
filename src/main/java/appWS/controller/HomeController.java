@@ -24,7 +24,7 @@ import appWS.factory.APIFactory;
 import appWS.factory.CashBackFactory;
 import appWS.model.entity.Venda;
 import appWS.model.entity.factory.VendaFactory;
-import appWS.model.repoositories.VendaRepositorio;
+import appWS.model.repositories.VendaRepositorio;
 import appWS.utils.ManipulacaoDatas;
 
 import com.google.gson.Gson;
