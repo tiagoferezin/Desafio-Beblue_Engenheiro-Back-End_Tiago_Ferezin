@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.wrapper.spotify.model_objects.specification.Album;
+
 /**
  * @author Tiago Ferezin Data: 25/01/2019
  */
@@ -27,11 +29,31 @@ public class Venda {
 	private Double valorTotal;
 
 	@Column(nullable = false)
+	private Album[] album;
+
+	@Column(nullable = false)
 	private Double cashbackTotal;
 
 	public Venda() {
 
 	}
+
+	
+	/**
+	 * @return the album
+	 */
+	public Album[] getAlbum() {
+		return album;
+	}
+
+
+	/**
+	 * @param album the album to set
+	 */
+	public void setAlbum(Album[] album) {
+		this.album = album;
+	}
+
 
 	/**
 	 * @return the idVenda

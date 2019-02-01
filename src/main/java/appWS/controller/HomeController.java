@@ -21,12 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 import appWS.factory.APIAlbum;
 import appWS.factory.APICategorias;
 import appWS.factory.APIFactory;
+import appWS.factory.CashBackFactory;
 import appWS.model.entity.Venda;
 import appWS.model.entity.factory.VendaFactory;
 import appWS.model.repoositories.VendaRepositorio;
 import appWS.utils.ManipulacaoDatas;
 
 import com.google.gson.Gson;
+import com.wrapper.spotify.model_objects.specification.Album;
 
 /**
  * @author Tiago Ferezin Data: 27/01/2019
@@ -119,6 +121,41 @@ public class HomeController {
 		Venda vendaPesquisa = new Venda();
 		Long idVenda = venda.getIdVenda();
 		vendaPesquisa = vendaRepositorio.findOne(idVenda);
+
+		CashBackFactory csf = new CashBackFactory();
+		Double precoAlbum = 26D;
+
+		List<String> listaCategoriasDesconto = new ArrayList<String>();
+		listaCategoriasDesconto.add("ROCK");
+		listaCategoriasDesconto.add("MBP");
+		listaCategoriasDesconto.add("CLASSIC");
+		listaCategoriasDesconto.add("POP");
+		Album[] albuns = venda.getAlbum();
+
+		String diaDaSemana = "";
+		Calendar dataAtual = Calendar.getInstance();
+		diaDaSemana = ManipulacaoDatas.getDiaDaSemana(dataAtual);
+
+		Double valor = 0D;
+		for (int i = 0; i < albuns.length; i++) {
+			String[] categoriasAlbum = {};
+			String categoria = "";
+			categoriasAlbum = albuns[i].getGenres();
+			for (int a = 0; a < categoriasAlbum.length; i++) {
+				String categoriaPesquisa = "";
+				categoriaPesquisa = categoriasAlbum[a].toUpperCase();
+
+				if (listaCategoriasDesconto.contains(categoriaPesquisa)) {
+					Double porcentagemCB = csf.getPorcentagem(diaDaSemana,
+							categoriaPesquisa);
+					Double valorCashBack = csf.getValorCashBack(precoAlbum,
+							porcentagemCB);
+
+					valor = precoAlbum - valorCashBack;
+				}
+
+			}
+		}
 
 		if ((vendaPesquisa != null) && (vendaPesquisa.getIdVenda() > 0L)) {
 			vendaRepositorio.save(vendaPesquisa); // UPDATE
